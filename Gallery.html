@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gallery</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-100 min-h-screen flex">
+
+    <!-- Sidebar -->
+    <div id="sidebar" class="w-64 bg-gray-900 text-white h-screen fixed left-0 top-0 transform -translate-x-full transition-transform duration-300">
+        <div class="p-5 flex justify-between items-center">
+            <h2 class="text-xl font-bold">Menu</h2>
+            <button onclick="toggleSidebar()" class="text-white text-2xl">&times;</button>
+        </div>
+        <nav class="mt-4">
+            <button onclick="showTab('imagesTab')" class="block w-full text-left px-4 py-2 hover:bg-gray-700">Images</button>
+            <button onclick="showTab('videosTab')" class="block w-full text-left px-4 py-2 hover:bg-gray-700">Videos</button>
+            <button onclick="showTab('audioTab')" class="block w-full text-left px-4 py-2 hover:bg-gray-700">Audio</button>
+            <button onclick="showTab('creditsTab')" class="block w-full text-left px-4 py-2 hover:bg-gray-700">Credits</button>
+            <button onclick="showTab('logoutTab')" class="block w-full text-left px-4 py-2 hover:bg-red-600">Logout</button>
+        </nav>
+    </div>
+
+    <!-- Sidebar Toggle Button -->
+    <button onclick="toggleSidebar()" class="fixed top-5 left-5 bg-gray-900 text-white px-4 py-2 rounded-lg z-10">
+        ☰ Menu
+    </button>
+
+    <!-- Main Content -->
+    <div id="content" class="container mx-auto p-8 ml-64 w-full transition-all duration-300">
+
+        <h2 class="text-3xl font-bold text-center mb-6">Gallery</h2>
+
+        <!-- Image Gallery -->
+        <div id="imagesTab" class="tab">
+            <h3 class="text-xl font-semibold mb-3">Images</h3>
+            <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+                <img src="images/image1.jpg" onclick="expandImage(this)" class="w-full h-48 object-cover rounded-lg shadow-md cursor-pointer">
+                <img src="images/image2.png" onclick="expandImage(this)" class="w-full h-48 object-cover rounded-lg shadow-md cursor-pointer">
+            </div>
+        </div>
+
+        <!-- Video Gallery -->
+        <div id="videosTab" class="tab hidden">
+            <h3 class="text-xl font-semibold mb-3">Videos</h3>
+            <div class="relative w-full max-w-lg">
+                <video controls class="w-full rounded-lg shadow-md">
+                    <source src="video/sample.mp4" type="video/mp4">
+                    Your browser does not support the video tag.
+                </video>
+            </div>
+        </div>
+
+        <!-- Audio Gallery -->
+        <div id="audioTab" class="tab hidden">
+            <h3 class="text-xl font-semibold mb-3">Audio</h3>
+            <audio controls class="w-full max-w-lg">
+                <source src="audio/sample.mp3" type="audio/mp3">
+                Your browser does not support the audio element.
+            </audio>
+        </div>
+
+        <!-- Credits -->
+        <div id="creditsTab" class="tab hidden">
+            <h3 class="text-xl font-semibold mb-3">Credits</h3>
+            <p>Gallery created by <strong>Your Name</strong>.</p>
+            <p>Images & videos sourced from personal collection.</p>
+        </div>
+
+        <!-- Logout Tab -->
+        <div id="logoutTab" class="tab hidden text-center">
+            <h3 class="text-xl font-semibold mb-3 text-red-600">Logout</h3>
+            <button onclick="logout()" class="bg-red-500 text-white px-6 py-2 rounded-lg hover:bg-red-600">
+                Logout
+            </button>
+        </div>
+
+        <!-- Image Modal -->
+        <div id="imageModal" class="fixed top-0 left-0 w-full h-full bg-black bg-opacity-75 flex items-center justify-center hidden">
+            <img id="modalImg" class="max-w-full max-h-full rounded-lg shadow-lg">
+            <button onclick="closeModal()" class="absolute top-5 right-5 text-white text-3xl">&times;</button>
+        </div>
+
+    </div>
+
+    <script>
+        // Sidebar toggle function
+        function toggleSidebar() {
+            let sidebar = document.getElementById("sidebar");
+            let content = document.getElementById("content");
+
+            sidebar.classList.toggle("-translate-x-full");
+            content.classList.toggle("ml-64"); // Shift content when sidebar opens
+        }
+
+        // Show the clicked image in a modal
+        function expandImage(imgElement) {
+            document.getElementById("modalImg").src = imgElement.src;
+            document.getElementById("imageModal").classList.remove("hidden");
+        }
+
+        // Close the modal
+        function closeModal() {
+            document.getElementById("imageModal").classList.add("hidden");
+        }
+
+        // Show the selected tab
+        function showTab(tabId) {
+            document.querySelectorAll('.tab').forEach(tab => tab.classList.add('hidden'));
+            document.getElementById(tabId).classList.remove('hidden');
+        }
+
+        // Ensure login before viewing the gallery
+        if (localStorage.getItem("loggedIn") !== "true") {
+            alert("You must log in first!");
+            window.location.href = "index.html";
+        }
+
+        function logout() {
+            localStorage.removeItem("loggedIn");
+            window.location.href = "index.html";
+        }
+    </script>
+
+</body>
+</html>
